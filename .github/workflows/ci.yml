@@ -1,0 +1,29 @@
+name: Deploy Static Site to Hostinger
+
+on:
+  push:
+    branches: [ master ]
+  repository_dispatch: # This allows WordPress to trigger the build
+    types: [ wordpress_update ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Sync files to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: /public_html/experiment/ # Or the path to your blog folder
