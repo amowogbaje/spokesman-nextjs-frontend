@@ -26,4 +26,4 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /public_html/experiment/ # Or the path to your blog folder
+          server-dir: ./ # Or the path to your blog folder
