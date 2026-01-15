@@ -1,4 +1,4 @@
-name: Deploy Static Site to Hostinger
+name: Deploy Church Site to Bluehost
 
 on:
   push:
