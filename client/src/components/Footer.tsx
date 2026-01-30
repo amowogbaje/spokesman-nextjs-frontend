@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-50 py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div>
             <div className="flex items-center mb-4">
               <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
@@ -68,7 +68,7 @@ export default function Footer() {
             </ul>
           </div>
           
-          <div>
+          {/* <div>
             <h4 className="font-bold text-lg mb-4">Resources</h4>
             <ul className="space-y-2">
               {FOOTER_LINKS.resources.map((link) => (
@@ -81,7 +81,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
         
         <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center">

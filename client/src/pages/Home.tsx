@@ -7,7 +7,7 @@ import Activate from "@/components/Activate";
 import AppDownload from "@/components/AppDownload";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import Footer from "@/components/Footer";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Message } from "@shared/schema";
 

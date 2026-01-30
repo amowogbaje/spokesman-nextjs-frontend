@@ -80,7 +80,7 @@ export const INFO_CARDS: CardItem[] = [
     content: "Are you a Leader? Do you want to add effectiveness to your leadership? Jump on this!",
     link: "https://ilcon.spokesmancom.org",
     linkText: "Learn More",
-    image: "/ilcon2025.jpg"
+    image: "/ilcon2026.png"
   },
   {
     id: "socialmedia",
@@ -163,20 +163,20 @@ export const UPCOMING_EVENTS: Event[] = [
 export const FOOTER_LINKS = {
   about: [
     { title: "Our Story", link: "/about" },
-    { title: "Beliefs", link: "/about/beliefs" },
-    { title: "Leadership", link: "/about/leadership" },
-    { title: "Purpose", link: "/about/purpose" }
+    { title: "Core Values", link: "/about#core-values" },
+    { title: "Leadership", link: "/about#leadership" },
+    { title: "Dream Church", link: "/about#dream-church" }
   ],
   connect: [
-    { title: "Get Involved", link: "/get-involved" },
-    { title: "Find a Group", link: "/groups" },
-    { title: "Serve", link: "/serve" },
+    { title: "New to Spokesman", link: "/welcome#new-to-spokesman" },
+    { title: "Get Involved", link: "/about#get-involved" },
+    { title: "Serve", link: "/welcome#start-volunteering" },
     { title: "Give", link: "/give" }
   ],
-  resources: [
-    { title: "Messages", link: "/watch" },
-    { title: "Daily Devotional", link: "/devotionals" },
-    { title: "Mobile App", link: "/app" },
-    { title: "Calendar", link: "/events" }
-  ]
+  // resources: [
+  //   { title: "Messages", link: "/watch" },
+  //   { title: "Daily Devotional", link: "/devotionals" },
+  //   { title: "Mobile App", link: "/app" },
+  //   { title: "Calendar", link: "/events" }
+  // ]
 };
