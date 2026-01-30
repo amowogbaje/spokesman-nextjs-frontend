@@ -3,9 +3,6 @@ name: Deploy Church Site to Bluehost
 on:
   push:
     branches: [ main ]
-  repository_dispatch: # This allows WordPress to trigger the build
-    types: [ wordpress_update ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +16,7 @@ jobs:
       - name: Build project
         run: npm run buildhtml
 
-      - name: Sync files to Hostinger via FTP
+      - name: Sync files to Bluehost via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
