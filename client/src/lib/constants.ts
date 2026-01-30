@@ -173,10 +173,10 @@ export const FOOTER_LINKS = {
     { title: "Serve", link: "/welcome#start-volunteering" },
     { title: "Give", link: "/give" }
   ],
-  // resources: [
-  //   { title: "Messages", link: "/watch" },
-  //   { title: "Daily Devotional", link: "/devotionals" },
-  //   { title: "Mobile App", link: "/app" },
-  //   { title: "Calendar", link: "/events" }
-  // ]
+  resources: [
+    { title: "Messages", link: "/watch" },
+    // { title: "Daily Devotional", link: "/devotionals" },
+    { title: "Locations", link: "/locations" },
+    { title: "Calendar", link: "/events" }
+  ]
 };
