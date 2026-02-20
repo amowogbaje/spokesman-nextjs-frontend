@@ -12,6 +12,7 @@ import Care from "@/pages/Care";
 import Give from "@/pages/Give";
 import Events from "@/pages/Events";
 import Welcome from "@/pages/Welcome";
+import ChatScript from "./components/ChatScript";
 
 function Router() {
   return (
@@ -34,6 +35,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <ChatScript />
         <Toaster />
         <Router />
       </TooltipProvider>
