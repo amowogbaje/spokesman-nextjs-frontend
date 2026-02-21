@@ -76,7 +76,7 @@ export default function UpcomingEvents() {
     upcomingQuery.isSuccess && upcomingQuery.data.length === 0;
 
   const pastEventsQuery = useQuery<ExternalEvent[]>({
-    queryKey: ["/api/events", { limit: 4 }],
+    queryKey: ["/api/events?limit=4"],
     enabled: shouldLoadPastEvents,
   });
 
@@ -87,6 +87,8 @@ export default function UpcomingEvents() {
   const error = upcomingQuery.error || pastEventsQuery.error;
 
   const { events, title } = React.useMemo(() => {
+    console.log("Upcoming Events Data:", upcomingQuery.data);
+    console.log("Past Events Data:", pastEventsQuery.data);
     if (shouldLoadPastEvents && pastEventsQuery.data) {
       return {
         title: "Past Events",
