@@ -1,4 +1,3 @@
-import { UPCOMING_EVENTS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Link } from "wouter";
@@ -6,8 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 /**
- * Interface for the Event data from the external API
- * This is completely separate from any database schema
+ * External API event shape
  */
 interface ExternalEvent {
   id: number;
@@ -18,11 +16,11 @@ interface ExternalEvent {
   location: string;
   description: string;
   image: string;
-  registration_url?: string; // Optional field
+  registration_url?: string;
 }
 
 /**
- * Event data structure for the UI display
+ * UI-ready event shape
  */
 interface EventDisplay {
   id: string;
@@ -35,116 +33,130 @@ interface EventDisplay {
   link: string;
 }
 
-export default function UpcomingEvents() {
-  // Fetch events from the external API
-  const {
-    data: externalEvents,
-    isLoading,
-    error
-  } = useQuery<ExternalEvent[]>({
-    queryKey: ['/api/events/upcoming'],
-  });
+function transformEvents(events: ExternalEvent[]): EventDisplay[] {
+  return events.map(event => {
+    let month = "";
+    let day = "";
 
-  // Process date strings to get month and day
-  const processedEvents = React.useMemo<EventDisplay[]>(() => {
-    // If no events from API or there's an error, use fallback data
-    if (!externalEvents || externalEvents.length === 0) {
-      return UPCOMING_EVENTS; // Fallback to constants for demo/dev
+    try {
+      const dateObj = new Date(event.date);
+      if (!isNaN(dateObj.getTime())) {
+        month = dateObj.toLocaleString("default", { month: "short" });
+        day = dateObj.getDate().toString();
+      } else {
+        const parts = event.date.split(/[,\s-]+/);
+        month = parts[0]?.substring(0, 3) ?? "";
+        day = parts[1] ?? "";
+      }
+    } catch {
+      const parts = event.date.split(/[\s,.-]+/);
+      month = parts[0]?.substring(0, 3) ?? "";
+      day = parts[1] ?? "";
     }
 
-    // Process external API data into our display format
-    return externalEvents.map(event => {
-      // Parse date string to get month and day
-      let month = '';
-      let day = '';
+    return {
+      id: event.id.toString(),
+      title: event.title,
+      date: event.date,
+      month,
+      day,
+      time: event.time,
+      image: event.image,
+      link: event.registration_url || `/events/${event.slug}`,
+    };
+  });
+}
 
-      try {
-        // Most date formats should work with this
-        const dateObj = new Date(event.date);
-        if (!isNaN(dateObj.getTime())) {
-          month = dateObj.toLocaleString('default', { month: 'short' });
-          day = dateObj.getDate().toString();
-        } else {
-          // If it's a custom format like "June 10-12, 2025", extract what we can
-          const dateParts = event.date.split(/[,\s-]+/);
-          if (dateParts.length >= 2) {
-            month = dateParts[0].substring(0, 3); // First 3 chars of month
-            day = dateParts[1]; // Just use the first day
-          }
-        }
-      } catch (e) {
-        // If parsing fails, use first part of the date string as month and second as day
-        const parts = event.date.split(/[\s,.-]+/);
-        month = parts[0]?.substring(0, 3) || '';
-        day = parts[1] || '';
-      }
+export default function UpcomingEvents() {
+  const upcomingQuery = useQuery<ExternalEvent[]>({
+    queryKey: ["/api/events/upcoming"],
+  });
 
-      // Transform external API data to our display format
+  const shouldLoadPastEvents =
+    upcomingQuery.isSuccess && upcomingQuery.data.length === 0;
+
+  const pastEventsQuery = useQuery<ExternalEvent[]>({
+    queryKey: ["/api/events", { limit: 4 }],
+    enabled: shouldLoadPastEvents,
+  });
+
+  const isLoading =
+    upcomingQuery.isLoading ||
+    (shouldLoadPastEvents && pastEventsQuery.isLoading);
+
+  const error = upcomingQuery.error || pastEventsQuery.error;
+
+  const { events, title } = React.useMemo(() => {
+    if (shouldLoadPastEvents && pastEventsQuery.data) {
       return {
-        id: event.id.toString(),
-        title: event.title,
-        date: event.date,
-        month,
-        day,
-        time: event.time,
-        image: event.image,
-        link: event.registration_url || `/events/${event.slug}`
+        title: "Past Events",
+        events: transformEvents(pastEventsQuery.data),
       };
-    });
-  }, [externalEvents]);
+    }
+
+    if (upcomingQuery.data) {
+      return {
+        title: "Upcoming Events",
+        events: transformEvents(upcomingQuery.data),
+      };
+    }
+
+    return { title: "Upcoming Events", events: [] };
+  }, [shouldLoadPastEvents, upcomingQuery.data, pastEventsQuery.data]);
 
   return (
     <section className="container mx-auto px-4 my-16">
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold mb-2">Upcoming Events</h2>
-        <p className="text-lg text-gray-500">Join us for these special events and gatherings</p>
+        <h2 className="text-3xl font-bold mb-2">{title}</h2>
+        <p className="text-lg text-gray-500">
+          Join us for these special events and gatherings
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {isLoading ? (
-          // Loading skeleton while waiting for API response
-          Array(4).fill(0).map((_, index) => (
-            <div key={index} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
-              <div className="w-full h-40 bg-gray-200"></div>
-              <div className="p-4">
-                <div className="flex items-start mb-3">
-                  <div className="bg-gray-100 rounded p-2 mr-3 w-12 h-14"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-100 rounded w-24"></div>
-                    <div className="h-3 bg-gray-100 rounded w-16"></div>
-                  </div>
-                </div>
-                <div className="h-3 bg-gray-100 rounded w-20"></div>
+          Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 animate-pulse"
+            >
+              <div className="w-full h-40 bg-gray-200" />
+              <div className="p-4 space-y-3">
+                <div className="h-4 bg-gray-100 rounded w-2/3" />
+                <div className="h-3 bg-gray-100 rounded w-1/2" />
               </div>
             </div>
           ))
         ) : error ? (
-          // Error state when API request fails
           <div className="col-span-4 text-center text-red-500">
-            Error loading events from API. Please try again later.
-            <p className="text-sm mt-2">API Error: {(error as Error).message}</p>
+            Failed to load events.
           </div>
         ) : (
-          // Render events from API response
-          processedEvents.map((event) => (
-            <div key={event.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          events.map(event => (
+            <div
+              key={event.id}
+              className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100"
+            >
               <img
                 src={event.image}
                 alt={event.title}
                 className="w-full h-40 object-cover"
               />
+
               <div className="p-4">
                 <div className="flex items-start mb-3">
                   <div className="bg-gray-50 rounded p-2 mr-3 text-center">
                     <span className="block text-sm font-bold">{event.month}</span>
                     <span className="block text-xl font-bold">{event.day}</span>
                   </div>
+
                   <div>
                     <h3 className="font-bold">{event.title}</h3>
                     <p className="text-sm text-gray-500">{event.time}</p>
                   </div>
                 </div>
-                {event.link.startsWith('http') ? (
+
+                {event.link.startsWith("http") ? (
                   <a
                     href={event.link}
                     target="_blank"
@@ -160,7 +172,6 @@ export default function UpcomingEvents() {
                     </span>
                   </Link>
                 )}
-
               </div>
             </div>
           ))
