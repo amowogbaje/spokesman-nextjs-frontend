@@ -14,6 +14,7 @@ export default function InfoCards() {
               className={`rounded-xl overflow-hidden ${!card.image ? card.color : ''} shadow-md h-96`}
             >
               {card.image ? (
+                
                 <div className="relative h-full">
                   <div 
                     className="absolute inset-0 bg-cover bg-center" 
@@ -31,6 +32,24 @@ export default function InfoCards() {
                       </Link>
                     </div>
                   </div>
+                  {card.services && (
+  <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-md rounded-xl shadow-lg px-4 py-3 space-y-2">
+    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+      Service Times
+    </p>
+
+    {card.services.map((service, index) => (
+      <div key={index} className="flex items-center justify-between gap-4">
+        <span className="text-sm font-medium text-gray-800">
+          {service.day}
+        </span>
+        <span className="text-sm font-semibold text-black">
+          {service.time}
+        </span>
+      </div>
+    ))}
+  </div>
+)}
                 </div>
               ) : (
                 <div className="px-8 py-10 h-full flex flex-col justify-end">

@@ -16,6 +16,7 @@ export type CardItem = {
   linkText: string;
   image?: string;
   color?: string;
+  services?: { day: string; time: string }[];
 };
 
 export type Location = {
@@ -83,11 +84,16 @@ export const INFO_CARDS: CardItem[] = [
     image: "/ilcon2026.png"
   },
   {
-    id: "socialmedia",
-    content: "There is a need for the Church to represent God on the social media, Do you have ideas?",
-    link: "/welcome#start-volunteering",
-    linkText: "Learn More",
-    image: "/social-media.png"
+    id: "services",
+    content: "Join us for powerful worship, teaching, and fellowship.",
+    link: "/welcome",
+    linkText: "Plan a Visit",
+    image: "/social-media.png",
+    services: [
+      { day: "Tue & Thu", time: "4:30 PM" },
+      { day: "Sunday", time: "8:00 – 10:00 AM" },
+      { day: "Sunday", time: "10:00 – 12:00 PM" }
+    ]
   }
 ];
 
