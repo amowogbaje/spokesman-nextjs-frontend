@@ -76,14 +76,6 @@ export const ACTION_ITEMS: ActionItem[] = [
 
 export const INFO_CARDS: CardItem[] = [
   {
-    id: "ilcon",
-    // title: "Discretion Series",
-    content: "Are you a Leader? Do you want to add effectiveness to your leadership? Jump on this!",
-    link: "https://ilcon.spokesmancom.org",
-    linkText: "Learn More",
-    image: "/ilcon2026.png"
-  },
-  {
     id: "services",
     content: "Join us for powerful worship, teaching, and fellowship.",
     link: "/welcome",
@@ -94,7 +86,16 @@ export const INFO_CARDS: CardItem[] = [
       { day: "Sunday", time: "8:00 – 10:00 AM" },
       { day: "Sunday", time: "10:00 – 12:00 PM" }
     ]
+  },
+  {
+    id: "ilcon",
+    // title: "Discretion Series",
+    content: "Are you a Leader? Do you want to add effectiveness to your leadership? Jump on this!",
+    link: "https://ilcon.spokesmancom.org",
+    linkText: "Learn More",
+    image: "/ilcon2026.png"
   }
+  
 ];
 
 
