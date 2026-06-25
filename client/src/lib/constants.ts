@@ -124,6 +124,42 @@ export const LOCATIONS: Location[] = [
   }
 ];
 
+export interface MailingListField {
+  name: string; // e.g. "company_name" — sent as-is, backend will snake_case anyway
+  label: string;
+  type?: "text" | "email" | "tel" | "textarea";
+  required?: boolean;
+}
+
+export interface MailingListDto {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  is_active: boolean;
+}
+
+export interface MailingContactDto {
+  id: number;
+  status: "subscribed" | "unsubscribed";
+  contact: {
+    first_name: string;
+    last_name: string | null;
+    email: string;
+    phone: string | null;
+  };
+  other_contact_details: { field_name: string; value: string }[];
+  created_at: string;
+}
+
+export interface SubscribePayload {
+  first_name: string;
+  last_name?: string;
+  email: string;
+  phone?: string;
+  fields?: Record<string, string>;
+}
+
 export const UPCOMING_EVENTS: Event[] = [
   {
     id: "easter-service",

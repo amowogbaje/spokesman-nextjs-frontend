@@ -13,6 +13,7 @@ import Give from "@/pages/Give";
 import Events from "@/pages/Events";
 import Welcome from "@/pages/Welcome";
 import ChatScript from "./components/ChatScript";
+import MailingListPage from "./pages/MailingListPage";
 
 function Router() {
   return (
@@ -26,6 +27,8 @@ function Router() {
       <Route path="/give" component={Give}/>
       <Route path="/events" component={Events}/>
       <Route path="/events/:slug" component={Events}/>
+      <Route path="/mailing-lists" component={MailingListPage}/>
+      <Route path="/mailing-lists/:slug" component={MailingListPage} />
       <Route component={NotFound} />
     </Switch>
   );
